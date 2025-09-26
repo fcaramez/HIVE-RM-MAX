@@ -1,51 +1,73 @@
-"use client";
+'use client'
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import z from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import Link from 'next/link'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import z from 'zod'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { toast } from 'sonner'
+import { setCookie } from 'cookies-next'
+import { useRouter } from 'next/navigation'
 
 const registerFormSchema = z.object({
-  firstName: z.string().min(1, "Nome é obrigatório"),
-  lastName: z.string().min(1, "Apelido é obrigatório"),
-  email: z.string().email("Endereço de email inválido"),
-  password: z
-    .string()
-    .min(8, "Palavra-passe é obrigatória")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      "Palavra passe necessita de pelo menos 8 caracteres, 1 letra maiúscula, 1 letra minúscula, 1 número e 1 caracter especial"
-    ),
-  number: z.number().min(1, "Número é obrigatório"),
-  type: z.string(),
-});
+  firstName: z.string().min(1, 'Nome é obrigatório'),
+  lastName: z.string().min(1, 'Apelido é obrigatório'),
+  email: z.string().email('Endereço de email inválido'),
+  password: z.string().min(8, 'Palavra-passe é obrigatória'),
+})
 
 export function RegisterForm() {
+  const router = useRouter()
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      password: "",
-      number: 0,
-      type: "user",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
     },
-  });
+  })
 
-  function onSubmit(values: z.infer<typeof registerFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof registerFormSchema>) {
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: `${values.firstName} ${values.lastName}`,
+          email: values.email,
+          password: values.password,
+        }),
+      })
+
+      const data = await res.json()
+
+      if (!data.success) {
+        toast.error(data.error, {
+          position: 'top-center',
+        })
+        return
+      }
+
+      const token = data.data.token
+
+      setCookie('token', token)
+
+      toast.success(data.message, {
+        position: 'top-center',
+      })
+
+      router.push('/dashboard')
+    } catch (error) {
+      toast.error('Erro interno do servidor', {
+        position: 'top-center',
+      })
+    }
   }
 
   return (
@@ -69,7 +91,13 @@ export function RegisterForm() {
                       <FormItem>
                         <FormLabel>Nome</FormLabel>
                         <FormControl>
-                          <Input placeholder="João" {...field} />
+                          <Input
+                            type="text"
+                            autoComplete="given-name"
+                            required
+                            placeholder="João"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -84,7 +112,13 @@ export function RegisterForm() {
                       <FormItem>
                         <FormLabel>Apelido</FormLabel>
                         <FormControl>
-                          <Input placeholder="Silva" {...field} />
+                          <Input
+                            type="text"
+                            autoComplete="family-name"
+                            required
+                            placeholder="Silva"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -100,7 +134,13 @@ export function RegisterForm() {
                     <FormItem>
                       <FormLabel>Endereço de email</FormLabel>
                       <FormControl>
-                        <Input placeholder="joao@gmail.com" {...field} />
+                        <Input
+                          type="email"
+                          autoComplete="email"
+                          required
+                          placeholder="joao@gmail.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -115,7 +155,12 @@ export function RegisterForm() {
                     <FormItem>
                       <FormLabel>Palavra-passe</FormLabel>
                       <FormControl>
-                        <Input placeholder="********" {...field} />
+                        <Input
+                          type="password"
+                          autoComplete="new-password"
+                          placeholder="********"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -124,10 +169,17 @@ export function RegisterForm() {
               </div>
             </div>
             <div className="flex flex-col gap-2">
-              <Button type="submit" className="w-full">
+              <Button
+                type="submit"
+                className="w-full"
+              >
                 Criar conta
               </Button>
-              <Button type="button" variant="outline" className="w-full">
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full"
+              >
                 <Link href="/?type=login">Já tem uma conta? Entrar</Link>
               </Button>
             </div>
@@ -135,5 +187,5 @@ export function RegisterForm() {
         </Form>
       </CardContent>
     </Card>
-  );
+  )
 }
