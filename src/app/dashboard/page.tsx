@@ -50,14 +50,20 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <Link
-              href="/dashboard/account"
+              href="/dashboard/exercises"
+              className="block"
+            >
+              <Button className="w-full justify-start">Adicionar Exercício</Button>
+            </Link>
+            <Link
+              href="/dashboard/exercises"
               className="block"
             >
               <Button
                 variant="outline"
                 className="w-full justify-start"
               >
-                Editar Perfil
+                Ver Exercícios
               </Button>
             </Link>
             <Link
@@ -68,7 +74,7 @@ export default async function DashboardPage() {
                 variant="outline"
                 className="w-full justify-start"
               >
-                Alterar Palavra-passe
+                Configurações da Conta
               </Button>
             </Link>
           </CardContent>
