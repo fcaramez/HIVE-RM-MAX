@@ -33,6 +33,8 @@ export async function getCurrentUser() {
     return user
   } catch (error) {
     console.error('Error getting current user:', error)
+    const cookieStore = await cookies()
+    cookieStore.delete('token')
     return null
   }
 }
