@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
+import { DeleteAccountDialog } from './components/delete-account-dialog'
 
 export default async function AccountPage() {
   const user = await getCurrentUser()
@@ -12,16 +13,8 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <div className="flex items-center gap-4 mb-6">
-        <Link href="/dashboard">
-          <Button
-            variant="outline"
-            size="sm"
-          >
-            ← Voltar ao Dashboard
-          </Button>
-        </Link>
+    <div className="p-6 max-w-2xl mx-auto flex flex-col items-center w-full gap-4">
+      <div className="flex flex-col items-center gap-4 mb-6">
         <h1 className="text-2xl font-bold">Configurações da Conta</h1>
       </div>
 
@@ -64,18 +57,19 @@ export default async function AccountPage() {
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <p className="text-sm text-red-600">Eliminar permanentemente a sua conta e todos os dados associados.</p>
-              <Link href="/dashboard/account/delete">
-                <Button
-                  variant="destructive"
-                  className="w-full"
-                >
-                  Eliminar Conta
-                </Button>
-              </Link>
+              <DeleteAccountDialog>Eliminar Conta</DeleteAccountDialog>
             </div>
           </CardContent>
         </Card>
       </div>
+      <Link href="/dashboard">
+        <Button
+          variant="outline"
+          size="sm"
+        >
+          ← Voltar ao Dashboard
+        </Button>
+      </Link>
     </div>
   )
 }

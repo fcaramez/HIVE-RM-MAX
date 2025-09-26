@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
+import { CreateExerciseDialog } from './components/create-exercise-dialog'
 export default async function DashboardPage() {
   const user = await getCurrentUser()
 
@@ -18,9 +18,6 @@ export default async function DashboardPage() {
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-gray-600">Bem-vindo, {user.name}!</p>
         </div>
-        <Link href="/dashboard/account">
-          <Button variant="outline">Configurações da Conta</Button>
-        </Link>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -49,12 +46,7 @@ export default async function DashboardPage() {
             <CardTitle>Ações Rápidas</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Link
-              href="/dashboard/exercises"
-              className="block"
-            >
-              <Button className="w-full justify-start">Adicionar Exercício</Button>
-            </Link>
+            <CreateExerciseDialog>Adicionar Exercício</CreateExerciseDialog>
             <Link
               href="/dashboard/exercises"
               className="block"
