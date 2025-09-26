@@ -16,7 +16,7 @@ const registerFormSchema = z.object({
   firstName: z.string().min(1, 'Nome é obrigatório'),
   lastName: z.string().min(1, 'Apelido é obrigatório'),
   email: z.string().email('Endereço de email inválido'),
-  password: z.string().min(8, 'Palavra-passe é obrigatória'),
+  password: z.string().min(8, 'Palavra-passe tem de ter pelo menos 8 caracteres'),
 })
 
 export function RegisterForm() {
