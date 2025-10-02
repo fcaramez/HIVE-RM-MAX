@@ -23,7 +23,7 @@ export default async function DashboardPage() {
       <div className="grid gap-6 md:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Informações do Utilizador</CardTitle>
+            <CardTitle className="font-bold">Informações do Utilizador</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             <p>
@@ -31,9 +31,6 @@ export default async function DashboardPage() {
             </p>
             <p>
               <span className="font-medium">Email:</span> {user.email}
-            </p>
-            <p>
-              <span className="font-medium">Função:</span> {user.role}
             </p>
             <p>
               <span className="font-medium">Membro desde:</span> {new Date(user.createdAt).toLocaleDateString('pt-PT')}

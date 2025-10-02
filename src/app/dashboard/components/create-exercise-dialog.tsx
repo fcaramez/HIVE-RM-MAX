@@ -104,14 +104,6 @@ export function CreateExerciseDialog({ children }: { children: React.ReactNode }
           />
         </div>
 
-        <div className="grid gap-2">
-          <Label htmlFor="notes">Notas (opcional)</Label>
-          <Input
-            id="notes"
-            placeholder="ex: Com cinto, sem ajuda..."
-          />
-        </div>
-
         <Button>Adicionar Exercício</Button>
         <DialogFooter className="w-full">
           <DialogClose asChild>
