@@ -8,10 +8,12 @@ export const config = {
   ],
 }
 
+const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET)
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
-  if (pathname === '/') {
+  if (pathname === '/' || pathname.startsWith('/api/')) {
     return NextResponse.next()
   }
 
@@ -22,9 +24,12 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    await jose.jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET))
+    await jose.jwtVerify(token, JWT_SECRET)
 
-    return NextResponse.next()
+    const response = NextResponse.next()
+    response.headers.set('Cache-Control', 'private, max-age=0, must-revalidate')
+
+    return response
   } catch (error) {
     return NextResponse.redirect(new URL('/', request.url))
   }

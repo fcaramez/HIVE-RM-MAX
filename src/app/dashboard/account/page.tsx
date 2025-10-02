@@ -34,21 +34,6 @@ export default async function AccountPage() {
           </CardContent>
         </Card>
 
-        {/* Password Change */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Segurança</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <p className="text-sm text-gray-600">Alterar a sua palavra-passe para manter a conta segura.</p>
-              <Link href="/dashboard/account/password">
-                <Button className="w-full">Alterar Palavra-passe</Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Danger Zone */}
         <Card className="border-red-200">
           <CardHeader>

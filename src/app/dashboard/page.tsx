@@ -47,20 +47,25 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent className="space-y-3">
             <CreateExerciseDialog>Adicionar Exercício</CreateExerciseDialog>
+            {/* START TODO: Add exercises */}
             <Link
-              href="/dashboard/exercises"
-              className="block"
+              href="#"
+              className="block cursor-not-allowed"
+              prefetch={true}
             >
               <Button
                 variant="outline"
                 className="w-full justify-start"
+                disabled={true}
               >
                 Ver Exercícios
               </Button>
             </Link>
+            {/* END TODO: Add exercises */}
             <Link
               href="/dashboard/account"
               className="block"
+              prefetch={true}
             >
               <Button
                 variant="outline"

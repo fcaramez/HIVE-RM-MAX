@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { toast } from 'sonner'
 import { setCookie } from 'cookies-next'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const registerFormSchema = z.object({
   firstName: z.string().min(1, 'Nome é obrigatório'),
@@ -21,6 +22,7 @@ const registerFormSchema = z.object({
 
 export function RegisterForm() {
   const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -33,6 +35,7 @@ export function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof registerFormSchema>) {
     try {
+      setIsLoading(true)
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
@@ -67,6 +70,8 @@ export function RegisterForm() {
       toast.error('Erro interno do servidor', {
         position: 'top-center',
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -96,6 +101,7 @@ export function RegisterForm() {
                             autoComplete="given-name"
                             required
                             placeholder="João"
+                            disabled={isLoading}
                             {...field}
                           />
                         </FormControl>
@@ -117,6 +123,7 @@ export function RegisterForm() {
                             autoComplete="family-name"
                             required
                             placeholder="Silva"
+                            disabled={isLoading}
                             {...field}
                           />
                         </FormControl>
@@ -139,6 +146,7 @@ export function RegisterForm() {
                           autoComplete="email"
                           required
                           placeholder="joao@gmail.com"
+                          disabled={isLoading}
                           {...field}
                         />
                       </FormControl>
@@ -159,6 +167,7 @@ export function RegisterForm() {
                           type="password"
                           autoComplete="new-password"
                           placeholder="********"
+                          disabled={isLoading}
                           {...field}
                         />
                       </FormControl>
@@ -172,13 +181,15 @@ export function RegisterForm() {
               <Button
                 type="submit"
                 className="w-full"
+                disabled={isLoading}
               >
-                Criar conta
+                {isLoading ? 'A criar conta...' : 'Criar conta'}
               </Button>
               <Button
                 type="button"
                 variant="outline"
                 className="w-full"
+                disabled={isLoading}
               >
                 <Link href="/?type=login">Já tem uma conta? Entrar</Link>
               </Button>

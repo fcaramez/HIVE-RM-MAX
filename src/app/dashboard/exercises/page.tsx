@@ -2,10 +2,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { redirect } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import Link from 'next/link'
-import { CreateExerciseDialog } from '../components/create-exercise-dialog'
 
 export default async function ExercisesPage() {
   const user = await getCurrentUser()
@@ -17,7 +14,10 @@ export default async function ExercisesPage() {
   return (
     <div className="p-6 max-w-4xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
-        <Link href="/dashboard">
+        <Link
+          href="/dashboard"
+          prefetch={true}
+        >
           <Button
             variant="outline"
             size="sm"

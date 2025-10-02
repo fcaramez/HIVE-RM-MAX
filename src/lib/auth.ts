@@ -3,8 +3,17 @@
 import { prisma } from './prisma'
 import { cookies } from 'next/headers'
 import * as jose from 'jose'
+import { cache } from 'react'
 
-export async function getCurrentUser() {
+export type User = {
+  id: string
+  name: string
+  email: string
+  role: string
+  createdAt: Date
+}
+
+export const getCurrentUser = cache(async () => {
   try {
     const cookieStore = await cookies()
     const token = cookieStore.get('token')?.value
@@ -37,4 +46,4 @@ export async function getCurrentUser() {
     cookieStore.delete('token')
     return null
   }
-}
+})

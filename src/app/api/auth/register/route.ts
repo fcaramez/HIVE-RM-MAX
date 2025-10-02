@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
       .sign(new TextEncoder().encode(process.env.JWT_SECRET))
 
     return NextResponse.json(
-      { message: `Bem-vindo ${user.name}`, data: { token: token.toString() }, success: true },
+      { message: `Bem-vindo/a ${user.name}`, data: { token: token.toString() }, success: true },
       { status: 201 },
     )
   } catch (_error) {
