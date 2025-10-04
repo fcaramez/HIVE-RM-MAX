@@ -1,11 +1,11 @@
-import { getCurrentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { api } from '@/lib/api';
 
 export default async function ExercisesPage() {
-  const user = await getCurrentUser();
+  const user = await api.auth.getCurrentUser();
 
   if (!user) {
     redirect('/');
