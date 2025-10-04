@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,63 +9,60 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
+} from '@/components/ui/dialog';
+import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { api } from '@/lib/api';
 
 export function DeleteAccountDialog({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const [isDeleting, setIsDeleting] = useState(false)
-  const [confirmationText, setConfirmationText] = useState('')
-  const [showConfirmation, setShowConfirmation] = useState(false)
-  const router = useRouter()
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleting, startDeleting] = useTransition();
+  const [confirmationText, setConfirmationText] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const router = useRouter();
 
   const handleDeleteAccount = async () => {
     if (confirmationText !== 'ELIMINAR') {
-      toast.error('Por favor, digite "ELIMINAR" para confirmar')
-      return
+      toast.error('Por favor, digite "ELIMINAR" para confirmar');
+      return;
     }
 
-    setIsDeleting(true)
+    startDeleting(async () => {
+      try {
+        const response = await api.auth.deleteAccount();
 
-    try {
-      const response = await fetch('/api/auth/deleteAccount', {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+        console.log(response);
 
-      const data = await response.json()
+        if (!response.success) {
+          throw new Error(response.error || 'Erro ao eliminar conta');
+        }
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao eliminar conta')
+        toast.success('Conta eliminada com sucesso');
+        setIsOpen(false);
+        router.push('/');
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        toast.error(error instanceof Error ? error.message : 'Erro ao eliminar conta');
+      } finally {
+        setIsDeleting(false);
       }
-
-      toast.success('Conta eliminada com sucesso')
-      setIsOpen(false)
-      router.push('/')
-    } catch (error) {
-      console.error('Error deleting account:', error)
-      toast.error(error instanceof Error ? error.message : 'Erro ao eliminar conta')
-    } finally {
-      setIsDeleting(false)
-    }
-  }
+    });
+  };
 
   const resetDialog = () => {
-    setConfirmationText('')
-    setShowConfirmation(false)
-    setIsDeleting(false)
-  }
+    setConfirmationText('');
+    setShowConfirmation(false);
+    setIsDeleting(false);
+  };
 
   return (
     <Dialog
       open={isOpen}
       onOpenChange={open => {
-        setIsOpen(open)
-        if (!open) resetDialog()
+        setIsOpen(open);
+        if (!open) resetDialog();
       }}
     >
       <DialogTrigger asChild>
@@ -142,7 +139,7 @@ export function DeleteAccountDialog({ children }: { children: React.ReactNode })
               variant="destructive"
               className="flex-1"
               onClick={handleDeleteAccount}
-              disabled={isDeleting || confirmationText !== 'ELIMINAR'}
+              disabled={deleting || confirmationText !== 'ELIMINAR'}
             >
               {isDeleting ? 'A Eliminar...' : 'Eliminar Conta Permanentemente'}
             </Button>
@@ -150,5 +147,5 @@ export function DeleteAccountDialog({ children }: { children: React.ReactNode })
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

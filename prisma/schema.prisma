@@ -45,12 +45,28 @@ model User {
   name      String
   email     String   @unique
   password  String
-  role      String   @default("user")
+  role      String   @default("aluno")
+  gender    String   @default("male")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  weights  Weight[]
-  repMaxes RepMax[]
+  weights   Weight[]
+  repMaxes  RepMax[]
+  Teacher   Teacher? @relation(fields: [teacherId], references: [id])
+  teacherId String?
+
+  @@index([email])
+  @@index([id])
+}
+
+model Teacher {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  password  String
+  students  User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([email])
   @@index([id])

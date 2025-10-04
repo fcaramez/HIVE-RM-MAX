@@ -1,17 +1,17 @@
-'use client'
+'use client';
 
-import { getCurrentUser } from '@/lib/auth'
-import { redirect } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import Link from 'next/link'
-import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import z from 'zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { toast } from 'sonner'
+import { api } from '@/lib/api';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import Link from 'next/link';
+import { useState, useEffect, useTransition } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import z from 'zod';
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { toast } from 'sonner';
 
 const profileFormSchema = z
   .object({
@@ -23,11 +23,11 @@ const profileFormSchema = z
   .refine(data => data.password === data.confirmPassword, {
     message: 'As palavras-passe não coincidem',
     path: ['confirmPassword'],
-  })
+  });
 
 export default function ProfilePage() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [loading, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof profileFormSchema>>({
     resolver: zodResolver(profileFormSchema),
@@ -38,61 +38,56 @@ export default function ProfilePage() {
       confirmPassword: '',
     },
     mode: 'onSubmit',
-  })
+  });
 
   useEffect(() => {
     async function fetchUser() {
       try {
-        const userData = await getCurrentUser()
+        const userData = await api.auth.getCurrentUser();
         if (!userData) {
-          redirect('/')
+          redirect('/');
         }
         form.reset({
           name: userData.name,
           email: userData.email,
           password: '',
           confirmPassword: '',
-        })
+        });
       } catch {
-        redirect('/')
+        redirect('/');
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
-    fetchUser()
-  }, [form])
+    fetchUser();
+  }, [form]);
 
-  async function onSubmit(values: z.infer<typeof profileFormSchema>) {
-    try {
-      setIsSubmitting(true)
-      const res = await fetch('/api/auth/editProfile', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      })
+  function onSubmit(values: z.infer<typeof profileFormSchema>) {
+    startTransition(async () => {
+      try {
+        const result = await api.auth.editProfile({
+          name: values.name,
+          email: values.email,
+          password: values.password,
+        });
 
-      const data = await res.json()
+        if (!result.success) {
+          toast.error(result.error, {
+            position: 'top-center',
+          });
+          return;
+        }
 
-      if (!data.success) {
-        toast.error(data.error, {
+        toast.success(result.message, {
           position: 'top-center',
-        })
-        return
+        });
+      } catch {
+        toast.error('Erro ao atualizar perfil', {
+          position: 'top-center',
+        });
       }
-
-      toast.success('Perfil atualizado com sucesso!', {
-        position: 'top-center',
-      })
-    } catch {
-      toast.error('Erro ao atualizar perfil', {
-        position: 'top-center',
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    });
   }
 
   if (isLoading) {
@@ -122,7 +117,7 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -161,7 +156,7 @@ export default function ProfilePage() {
                           <Input
                             type="text"
                             placeholder="Seu nome completo"
-                            disabled={isSubmitting}
+                            disabled={loading}
                             {...field}
                           />
                         </FormControl>
@@ -182,7 +177,7 @@ export default function ProfilePage() {
                           <Input
                             type="email"
                             placeholder="seu@email.com"
-                            disabled={isSubmitting}
+                            disabled={loading}
                             {...field}
                           />
                         </FormControl>
@@ -203,7 +198,7 @@ export default function ProfilePage() {
                           <Input
                             type="password"
                             placeholder="********"
-                            disabled={isSubmitting}
+                            disabled={loading}
                             {...field}
                           />
                         </FormControl>
@@ -223,7 +218,7 @@ export default function ProfilePage() {
                           <Input
                             type="password"
                             placeholder="********"
-                            disabled={isSubmitting}
+                            disabled={loading}
                             {...field}
                           />
                         </FormControl>
@@ -238,9 +233,9 @@ export default function ProfilePage() {
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={isSubmitting}
+                  disabled={loading}
                 >
-                  {isSubmitting ? 'A guardar...' : 'Guardar Alterações'}
+                  {loading ? 'A guardar...' : 'Guardar Alterações'}
                 </Button>
               </div>
             </form>
@@ -248,5 +243,5 @@ export default function ProfilePage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-import { getCurrentUser } from '@/lib/auth'
-import { redirect } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
+import { getCurrentUser } from '@/lib/auth';
+import { redirect } from 'next/navigation';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 
 export default async function ExercisesPage() {
-  const user = await getCurrentUser()
+  const user = await getCurrentUser();
 
   if (!user) {
-    redirect('/')
+    redirect('/');
   }
 
   return (
@@ -56,5 +56,5 @@ export default async function ExercisesPage() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

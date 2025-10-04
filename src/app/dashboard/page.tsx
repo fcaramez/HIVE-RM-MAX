@@ -1,14 +1,14 @@
-import { getCurrentUser } from '@/lib/auth'
-import { redirect } from 'next/navigation'
-import Link from 'next/link'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { CreateExerciseDialog } from './components/create-exercise-dialog'
+import { api } from '@/lib/api';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CreateExerciseDialog } from './components/create-exercise-dialog';
 export default async function DashboardPage() {
-  const user = await getCurrentUser()
+  const user = await api.auth.getCurrentUser();
 
   if (!user) {
-    redirect('/')
+    redirect('/');
   }
 
   return (
@@ -75,5 +75,5 @@ export default async function DashboardPage() {
         </Card>
       </div>
     </div>
-  )
+  );
 }

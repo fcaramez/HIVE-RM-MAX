@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -11,22 +11,22 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog'
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Check, ChevronsUpDown } from 'lucide-react'
-import { useState } from 'react'
+} from '@/components/ui/dialog';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { useState } from 'react';
 
 const exercises = [
   { value: 'supino', label: 'Supino' },
   { value: 'remada', label: 'Remada' },
   { value: 'deadlift', label: 'Deadlift' },
   { value: 'agachamento', label: 'Agachamento' },
-]
+];
 
 export function CreateExerciseDialog({ children }: { children: React.ReactNode }) {
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState('')
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('');
 
   return (
     <Dialog>
@@ -59,7 +59,7 @@ export function CreateExerciseDialog({ children }: { children: React.ReactNode }
               align="start"
             >
               <Command>
-                <CommandInput placeholder="Buscar exercício..." />
+                <CommandInput placeholder="Pesquisar exercício..." />
                 <CommandList>
                   <CommandEmpty>Nenhum exercício encontrado.</CommandEmpty>
                   <CommandGroup>
@@ -68,8 +68,8 @@ export function CreateExerciseDialog({ children }: { children: React.ReactNode }
                         key={exercise.value}
                         value={exercise.value}
                         onSelect={currentValue => {
-                          setValue(currentValue === value ? '' : currentValue)
-                          setOpen(false)
+                          setValue(currentValue === value ? '' : currentValue);
+                          setOpen(false);
                         }}
                       >
                         <Check className={`mr-2 h-4 w-4 ${value === exercise.value ? 'opacity-100' : 'opacity-0'}`} />
@@ -84,9 +84,9 @@ export function CreateExerciseDialog({ children }: { children: React.ReactNode }
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="rep-max">Rep Max (kg)</Label>
+          <Label htmlFor="rep-max">Peso (kg)</Label>
           <Input
-            id="rep-max"
+            id="weight"
             type="number"
             placeholder="ex: 100"
             min="0"
@@ -95,7 +95,7 @@ export function CreateExerciseDialog({ children }: { children: React.ReactNode }
         </div>
 
         <div className="grid gap-2">
-          <Label htmlFor="reps">Número de Repetições</Label>
+          <Label htmlFor="reps">Repetições</Label>
           <Input
             id="reps"
             type="number"
@@ -118,5 +118,5 @@ export function CreateExerciseDialog({ children }: { children: React.ReactNode }
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
