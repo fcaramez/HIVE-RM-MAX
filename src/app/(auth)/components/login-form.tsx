@@ -10,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { toast } from 'sonner';
-import { setCookie } from 'cookies-next';
 import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api';
 
@@ -44,10 +43,6 @@ export function LoginForm() {
           });
           return;
         }
-
-        const token = res.data.token;
-
-        setCookie('token', token);
 
         toast.success(res.message, {
           position: 'top-center',

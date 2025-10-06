@@ -48,9 +48,7 @@ export const _getCurrentUser = cache(async (): Promise<AuthUser | null> => {
     }
 
     return { ...user, role: role as UserRole };
-  } catch (error) {
-    const cookieStore = await cookies();
-    cookieStore.delete('token');
+  } catch {
     return null;
   }
 });
