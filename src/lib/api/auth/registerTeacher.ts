@@ -35,7 +35,7 @@ export const _registerTeacher = async ({
       role: 'professor',
     };
 
-    const token = await new jose.SignJWT({ payload })
+    const token = await new jose.SignJWT({ ...payload })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1h')
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));

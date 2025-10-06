@@ -32,7 +32,7 @@ export const _loginUser = async ({ email, password }: LoginRequest): Promise<Aut
       role: userExists.role,
     };
 
-    const token = await new jose.SignJWT({ payload })
+    const token = await new jose.SignJWT({ ...payload })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime('1h')
       .sign(new TextEncoder().encode(process.env.JWT_SECRET));

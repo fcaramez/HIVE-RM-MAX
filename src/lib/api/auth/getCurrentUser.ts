@@ -28,6 +28,10 @@ export const getCurrentUser = cache(async (token: string): Promise<AuthUser | nu
       payload: { email, role },
     } = await jose.jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET));
 
+    if (!email || !role) {
+      return null;
+    }
+
     if (role === 'professor') {
       user = await prisma.teacher.findFirst({
         where: { email: email as string },
