@@ -16,11 +16,8 @@ interface AuthUser {
   gender?: string;
 }
 
-export const _getCurrentUser = cache(async (): Promise<AuthUser | null> => {
+export const getCurrentUser = cache(async (token: string): Promise<AuthUser | null> => {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('token')?.value;
-
     if (!token) {
       return null;
     }
@@ -52,3 +49,9 @@ export const _getCurrentUser = cache(async (): Promise<AuthUser | null> => {
     return null;
   }
 });
+
+export async function _getCurrentUser(): Promise<AuthUser | null> {
+  const cookieStore = await cookies();
+  const token = cookieStore.get('token')?.value;
+  return getCurrentUser(token || '');
+}
