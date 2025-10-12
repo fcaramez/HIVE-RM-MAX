@@ -33,8 +33,6 @@ export function DeleteAccountDialog({ children }: { children: React.ReactNode })
       try {
         const response = await api.auth.deleteAccount();
 
-        console.log(response);
-
         if (!response.success) {
           throw new Error(response.error || 'Erro ao eliminar conta');
         }

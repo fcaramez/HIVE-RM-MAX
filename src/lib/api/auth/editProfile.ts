@@ -9,10 +9,12 @@ export const _editProfile = async ({
   name,
   email,
   password,
+  teacherId,
 }: {
   name: string;
   email: string;
   password: string;
+  teacherId: string;
 }): Promise<
   | {
       message: string;
@@ -84,9 +86,11 @@ export const _editProfile = async ({
       name: string;
       email: string;
       password?: string;
+      teacherId?: string;
     } = {
       name,
       email,
+      teacherId,
     };
 
     if (password) {

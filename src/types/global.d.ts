@@ -80,6 +80,7 @@ declare global {
     password: string;
     gender: 'male' | 'female';
     teacher?: string;
+    studentNumber: string;
   };
 
   type TeacherFormData = {
@@ -96,6 +97,7 @@ declare global {
     password: string;
     gender: 'male' | 'female';
     teacher?: string;
+    studentNumber?: number;
   };
 
   type TeacherRegisterRequest = {
@@ -124,10 +126,17 @@ declare global {
         data: null;
       };
 
-  type TeacherOption = 'pombo' | 'rocha' | 'carolina';
   type UserRole = 'aluno' | 'professor';
   type Gender = 'male' | 'female';
   type RegisterTab = 'student' | 'teacher';
+
+  type StrengthExerciseFormData = {
+    category: 'core' | 'auxiliary';
+    weight: number;
+    reps: number;
+    name: string;
+    userId: string;
+  };
 }
 
 export {};

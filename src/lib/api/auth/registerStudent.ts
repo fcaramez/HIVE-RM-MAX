@@ -9,10 +9,15 @@ export const _registerStudent = async ({
   password,
   gender,
   teacher,
+  studentNumber,
 }: StudentRegisterRequest): Promise<AuthResponse> => {
   try {
     if (!name || !email || !password || !gender || !teacher) {
       return { error: 'Todos os campos são obrigatórios', data: null, success: false };
+    }
+
+    if (!studentNumber) {
+      return { error: 'Número de aluno é obrigatório', data: null, success: false };
     }
 
     const userExists = await prisma.user.findFirst({
@@ -26,7 +31,7 @@ export const _registerStudent = async ({
     const hashedPassword = await argon2.hash(password);
 
     const createdUser = await prisma.user.create({
-      data: { name, email, password: hashedPassword, gender, teacherId: teacher },
+      data: { name, email, password: hashedPassword, gender, teacherId: teacher, studentNumber },
     });
 
     const payload = {
@@ -34,6 +39,7 @@ export const _registerStudent = async ({
       name: createdUser.name,
       email: createdUser.email,
       role: createdUser.role,
+      studentNumber: createdUser.studentNumber,
     };
 
     const token = await new jose.SignJWT({ ...payload })

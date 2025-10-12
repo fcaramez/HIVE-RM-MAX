@@ -1,4 +1,5 @@
 'use server';
+
 import { cookies } from 'next/headers';
 
 export const _signOutUser = async (): Promise<null> => {

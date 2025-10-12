@@ -9,7 +9,7 @@ import { TeacherRegisterForm } from './forms/teacher-register-form';
 import { StudentRegisterForm } from './forms/student-register-form';
 
 interface RegisterFormProps {
-  teachers: Teacher[];
+  teachers: Omit<Teacher, 'password'>[];
 }
 
 export function RegisterForm({ teachers }: RegisterFormProps) {

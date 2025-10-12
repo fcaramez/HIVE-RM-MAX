@@ -14,6 +14,7 @@ interface AuthUser {
   createdAt: Date;
   updatedAt: Date;
   gender?: string;
+  teacher?: Teacher;
 }
 
 export const getCurrentUser = cache(async (token: string): Promise<AuthUser | null> => {
@@ -40,7 +41,17 @@ export const getCurrentUser = cache(async (token: string): Promise<AuthUser | nu
     } else {
       user = await prisma.user.findFirst({
         where: { email: email as string },
-        select: { id: true, name: true, email: true, createdAt: true, updatedAt: true, gender: true },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+          gender: true,
+          teacher: {
+            select: { id: true },
+          },
+        },
       });
     }
 

@@ -19,7 +19,6 @@ export default async function AccountPage() {
       </div>
 
       <div className="space-y-4">
-        {/* Profile Information */}
         <Card>
           <CardHeader>
             <CardTitle>Informações do Perfil</CardTitle>
@@ -34,7 +33,32 @@ export default async function AccountPage() {
           </CardContent>
         </Card>
 
-        {/* Danger Zone */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Sessão</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <p className="text-sm text-gray-600">Terminar a sua sessão atual.</p>
+              <form
+                action={async () => {
+                  'use server';
+                  void (await api.auth.signOutUser());
+                  redirect('/');
+                }}
+              >
+                <Button
+                  type="submit"
+                  variant="secondary"
+                  className="w-full"
+                >
+                  Terminar Sessão
+                </Button>
+              </form>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="border-red-200">
           <CardHeader>
             <CardTitle className="text-red-600">Zona de Perigo</CardTitle>

@@ -18,7 +18,7 @@ export default async function AuthPage({
     redirect('/dashboard');
   }
 
-  let teachers: Teacher[] = [];
+  let teachers: Omit<Teacher, 'password'>[] = [];
 
   if (type === 'register') {
     teachers = await api.query.getAllTeachers();

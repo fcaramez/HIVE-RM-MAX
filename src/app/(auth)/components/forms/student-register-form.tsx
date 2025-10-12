@@ -24,9 +24,11 @@ const registerStudentFormSchema = z.object({
     message: 'Por favor selecione um género',
   }),
   teacher: z.string().optional(),
+  studentNumber: z.string().min(1, 'Número de aluno é obrigatório'),
 });
+
 interface StudentRegisterFormProps {
-  teachers: Teacher[];
+  teachers: Omit<Teacher, 'password'>[];
 }
 
 export const StudentRegisterForm = ({ teachers }: StudentRegisterFormProps) => {
@@ -41,6 +43,7 @@ export const StudentRegisterForm = ({ teachers }: StudentRegisterFormProps) => {
       password: '',
       gender: 'male',
       teacher: '',
+      studentNumber: '0',
     },
   });
 
@@ -53,6 +56,7 @@ export const StudentRegisterForm = ({ teachers }: StudentRegisterFormProps) => {
         password: values.password,
         gender: values.gender,
         teacher: values.teacher,
+        studentNumber: parseInt(values.studentNumber),
       });
 
       if (!res.success) {
@@ -107,6 +111,56 @@ export const StudentRegisterForm = ({ teachers }: StudentRegisterFormProps) => {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name="teacher"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Professor</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Selecione o seu Professor" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent className="w-full">
+                    {teachers.map(teacher => (
+                      <SelectItem
+                        key={teacher.id}
+                        value={teacher.id}
+                        className="text-black"
+                      >
+                        {teacher.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="studentNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Número de aluno</FormLabel>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="12"
+                    disabled={loading}
+                    {...field}
+                    onChange={e => field.onChange(e.target.value)}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <div className="flex items-center justify-center gap-2 w-full">
             <FormField
               control={form.control}
@@ -147,37 +201,6 @@ export const StudentRegisterForm = ({ teachers }: StudentRegisterFormProps) => {
               )}
             />
           </div>
-
-          <FormField
-            control={form.control}
-            name="teacher"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Professor</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Selecione o seu Professor" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="w-full">
-                    {teachers.map(teacher => (
-                      <SelectItem
-                        key={teacher.id}
-                        value={teacher.id}
-                      >
-                        {teacher.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <FormField
             control={form.control}
             name="email"
