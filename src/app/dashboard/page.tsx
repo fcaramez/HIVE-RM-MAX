@@ -4,6 +4,9 @@ import { Dumbbell, TrendingUp, Trophy, User } from 'lucide-react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 
+// Enable ISR with 30 minutes revalidation for dashboard
+export const revalidate = 1800;
+
 const navigationCards = [
   {
     title: 'Novo RM',
@@ -62,6 +65,7 @@ export default async function DashboardPage() {
                 key={card.href}
                 href={card.href}
                 className="group"
+                prefetch={true}
               >
                 <Card className="relative overflow-hidden border-2 transition-all duration-300 hover:border-primary hover:shadow-lg">
                   <div

@@ -4,6 +4,9 @@ import Link from 'next/link';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 
+// Enable ISR with 15 minutes revalidation for RM overview
+export const revalidate = 900;
+
 export default async function RMPage() {
   const { strengthRms, aerobicRms } = await api.query.getUserRms();
   const { strengthExercises, aerobicExercises } = await api.query.getAllExercises();
@@ -14,6 +17,7 @@ export default async function RMPage() {
         <Link
           href={'/dashboard/rm/strength'}
           className="p-4 w-full"
+          prefetch={true}
         >
           <Card className="relative overflow-hidden border-2 transition-all duration-300 hover:border-primary hover:shadow-lg">
             <div
@@ -33,6 +37,7 @@ export default async function RMPage() {
         <Link
           href={'/dashboard/rm/aerobic'}
           className="p-4 w-full"
+          prefetch={true}
         >
           <Card className="relative overflow-hidden border-2 transition-all duration-300 hover:border-primary hover:shadow-lg">
             <div

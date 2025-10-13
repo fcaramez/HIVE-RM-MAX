@@ -3,6 +3,9 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
 
+// Enable ISR with 1 hour revalidation for aerobic exercises list
+export const revalidate = 3600;
+
 export default async function StrengthRMPage() {
   const { aerobicExercises } = await api.query.getAllExercises();
 
@@ -15,6 +18,7 @@ export default async function StrengthRMPage() {
               key={exercise.id}
               href={`/dashboard/rm/aerobic/${exercise.id}`}
               className="min-w-full"
+              prefetch={true}
             >
               <Button className="min-w-full ">{exercise.name}</Button>
             </Link>

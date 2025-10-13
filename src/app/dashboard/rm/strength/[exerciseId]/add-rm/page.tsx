@@ -2,6 +2,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AddRmForm } from './components/add-rm-form';
 import { api } from '@/lib/api';
 
+// Generate static params for all strength exercises
+export async function generateStaticParams() {
+  const { strengthExercises } = await api.query.getAllExercises();
+
+  return strengthExercises.map(exercise => ({
+    exerciseId: exercise.id,
+  }));
+}
+
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
+
 export default async function AddRmPage({ params }: { params: { exerciseId: string } }) {
   const { exerciseId } = await params;
 

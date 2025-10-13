@@ -2,8 +2,9 @@
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '../auth/getCurrentUser';
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 
-export const _getUserRms = async () => {
+export const _getUserRms = cache(async () => {
   const token = (await cookies()).get('token')?.value;
   const user = await getCurrentUser(token || '');
 
@@ -20,4 +21,4 @@ export const _getUserRms = async () => {
   });
 
   return { strengthRms, aerobicRms };
-};
+});

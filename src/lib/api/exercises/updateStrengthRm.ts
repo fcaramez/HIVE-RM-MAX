@@ -2,6 +2,7 @@
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser } from '../auth/getCurrentUser';
 import { cookies } from 'next/headers';
+import { revalidatePath } from 'next/cache';
 
 export const _updateStrengthRm = async ({ weight, reps, rmId }: { weight: number; reps: number; rmId: string }) => {
   try {
@@ -20,7 +21,9 @@ export const _updateStrengthRm = async ({ weight, reps, rmId }: { weight: number
       },
     });
 
-    console.log('strengthRm', strengthRm);
+    // Revalidate relevant paths
+    revalidatePath('/dashboard/rm');
+    revalidatePath(`/dashboard/rm/strength/${strengthRm.strengthExerciseId}`);
 
     return { message: 'RM atualizado com sucesso', data: strengthRm, success: true };
   } catch (error) {

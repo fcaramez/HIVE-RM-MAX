@@ -3,6 +3,10 @@ import type { NextConfig } from 'next';
 const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-popover'],
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
   },
   images: {
     formats: ['image/webp', 'image/avif'],

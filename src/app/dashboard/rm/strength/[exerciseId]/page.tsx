@@ -4,6 +4,18 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import RepsTable from './components/reps-table';
 
+// Generate static params for all strength exercises
+export async function generateStaticParams() {
+  const { strengthExercises } = await api.query.getAllExercises();
+
+  return strengthExercises.map(exercise => ({
+    exerciseId: exercise.id,
+  }));
+}
+
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
+
 export default async function RMExercisePage({ params }: { params: { exerciseId: string } }) {
   const { exerciseId } = await params;
 
@@ -23,6 +35,7 @@ export default async function RMExercisePage({ params }: { params: { exerciseId:
               <Link
                 href={`/dashboard/rm/strength/${exerciseId}/add-rm`}
                 className="w-full"
+                prefetch={true}
               >
                 <Button>Adicione seu primeiro RM para este exercício</Button>
               </Link>
@@ -33,6 +46,7 @@ export default async function RMExercisePage({ params }: { params: { exerciseId:
               <Link
                 href={`/dashboard/rm/strength/${exerciseId}/add-rm`}
                 className="w-full"
+                prefetch={true}
               >
                 <Button className="w-full">Atualize o seu RM para este exercício</Button>
               </Link>

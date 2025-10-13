@@ -1,7 +1,8 @@
 import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
+import { cache } from 'react';
 
-export const _getExercise = async (exerciseId: string) => {
+export const _getExercise = cache(async (exerciseId: string) => {
   let exercise = null;
 
   exercise = await prisma.strengthExercise.findUnique({
@@ -19,4 +20,4 @@ export const _getExercise = async (exerciseId: string) => {
   }
 
   return exercise;
-};
+});
