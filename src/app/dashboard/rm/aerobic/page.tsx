@@ -20,7 +20,7 @@ export default async function StrengthRMPage() {
               className="min-w-full"
               prefetch={true}
             >
-              <Button className="min-w-full ">{exercise.name}</Button>
+              <Button className="min-w-full">{exercise.name}</Button>
             </Link>
           ))}
 
