@@ -18,5 +18,5 @@ export const calculateAerobicRepMax = ({ distance, time }: { distance: number; t
 };
 
 export const getTargetDistance = ({ repMax, targetDistance }: { repMax: number; targetDistance: number }) => {
-  return Number((repMax * targetDistance).toFixed(2));
+  return Math.trunc(repMax * targetDistance + 1);
 };

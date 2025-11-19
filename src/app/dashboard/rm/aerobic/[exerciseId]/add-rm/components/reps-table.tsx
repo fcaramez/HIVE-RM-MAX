@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { calculateRepMax, getTargetReps } from '@/lib/utils';
+import { calculateAerobicRepMax, getTargetDistance } from '@/lib/utils';
 
 export type ColumnData = {
   time: number;
@@ -12,11 +12,11 @@ export type ColumnData = {
 export const columns: ColumnDef<ColumnData>[] = [
   {
     accessorKey: 'time',
-    header: 'Repetições',
+    header: 'Tempo (min)',
   },
   {
     accessorKey: 'distance',
-    header: 'Peso',
+    header: 'Distância (m)',
   },
 ];
 interface DataTableProps<TData, TValue> {
@@ -73,13 +73,13 @@ function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData, TValu
     </div>
   );
 }
-export default function RepsTable({ userRm }: { userRm: { weight: number; reps: number } }) {
-  const max = calculateRepMax({ weight: userRm.weight, reps: userRm.reps });
+export default function RepsTable({ userRm }: { userRm: { distance: number; time: number } }) {
+  const max = calculateAerobicRepMax({ distance: userRm.distance, time: userRm.time });
 
   const generateTableData = () => {
     return Array.from({ length: 10 }, (_, index) => ({
-      reps: index + 1,
-      weight: getTargetReps({ repMax: max, targetReps: index + 1 }),
+      time: index + 1,
+      distance: getTargetDistance({ repMax: max, targetDistance: Math.trunc(Math.round((index + 1) * 60)) }),
     }));
   };
 

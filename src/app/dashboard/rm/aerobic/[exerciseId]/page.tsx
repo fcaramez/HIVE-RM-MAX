@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import RepsTable from './add-rm/components/reps-table';
 
 export default async function AerobicExercisePage({ params }: { params: { exerciseId: string } }) {
   const { exerciseId } = await params;
